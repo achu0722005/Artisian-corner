@@ -1,7 +1,9 @@
 import React from 'react'
 import { NavLink } from "react-router-dom";
 import { ShoppingCart, Leaf } from "lucide-react";
+import { useCart } from "../context/CartContext"; 
 const Navbar = () => {
+  const { cartItems } = useCart();
   return (
     <nav className='relative z-50 bg-amber-50 flex justify-between items-center px-20 h-20 border-b shadow-sm'>
         
@@ -29,7 +31,7 @@ const Navbar = () => {
         <div className='flex items-center gap-8 text-sm font-medium text-stone-700'>
             <NavLink to="/login" 
             className="hover:text-amber-700 transition">Login</NavLink>
-            <NavLink to="/cart" className="flex items-center gap-1 hover:text-amber-700 transition"><ShoppingCart size={20}/>Cart</NavLink>
+            <NavLink to="/cart" className="flex items-center gap-1 hover:text-amber-700 transition"><ShoppingCart size={20}/>Cart ({cartItems.length})</NavLink>
         </div>
     </nav>
   );
