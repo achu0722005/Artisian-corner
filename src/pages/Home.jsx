@@ -1,12 +1,14 @@
 import React from 'react'
 import Navbar from '../components/Navbar'
 import hero from "../assets/hero.jpg";
-
+import { Link } from "react-router-dom";
 import CategoryCard from "../components/CategoryCard.jsx";
 import category1 from "../assets/category1.jpg"
 import category2 from "../assets/category2.jpg"
 import category3 from "../assets/category3.jpg"
 import category4 from "../assets/category4.jpg"
+import products from "../data/products";
+import ProductCard from "../components/ProductCard";
 import { useNavigate } from "react-router-dom";
 
 
@@ -18,6 +20,7 @@ const Home = () => {
   { title: "Jewelry", image: category3 },
   { title: "Textiles", image: category4 },
 ];
+
   return (
     <div >
       {/* hero section */}
@@ -59,37 +62,10 @@ const Home = () => {
   </h2>
 
   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-    <div className="bg-amber-50 p-6 rounded-xl shadow">
-      <h3 className="font-semibold">Handmade Vase</h3>
-      <p className="text-gray-600">$45</p>
-    </div>
-
-    <div className="bg-amber-50 p-6 rounded-xl shadow">
-      <h3 className="font-semibold">Wooden Wall Art</h3>
-      <p className="text-gray-600">$60</p>
-    </div>
-    <div className="bg-amber-50 p-6 rounded-xl shadow">
-      <h3 className="font-semibold">Wooden Wall Art</h3>
-      <p className="text-gray-600">$60</p>
-    </div>
-    <div className="bg-amber-50 p-6 rounded-xl shadow">
-      <h3 className="font-semibold">Wooden Wall Art</h3>
-      <p className="text-gray-600">$60</p>
-    </div>
-
-    <div className="bg-amber-50 p-6 rounded-xl shadow">
-      <h3 className="font-semibold">Beaded Necklace</h3>
-      <p className="text-gray-600">$30</p>
-    </div>
-    <div className="bg-amber-50 p-6 rounded-xl shadow">
-      <h3 className="font-semibold">Beaded Necklace</h3>
-      <p className="text-gray-600">$30</p>
-    </div>
-    <div className="bg-amber-50 p-6 rounded-xl shadow">
-      <h3 className="font-semibold">Beaded Necklace</h3>
-      <p className="text-gray-600">$30</p>
-    </div>
-  </div>
+  {products.map((product) => (
+  <ProductCard key={product.id} product={product} />
+))}
+</div>
 </div>
 <footer className="bg-stone-900 text-gray-300 pt-16 pb-8 px-20">
   <div className="grid grid-cols-1 md:grid-cols-4 gap-12">

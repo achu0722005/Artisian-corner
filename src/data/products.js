@@ -1,32 +1,32 @@
 const products = [
   {
     id: 1,
-    name: "Clay Vase",
+    name: "Handmade Vase",
     price: 45,
+    description: "Beautiful handcrafted ceramic vase.",
     category: "pottery",
-    image: "https://via.placeholder.com/300"
   },
   {
     id: 2,
-    name: "Terracotta Bowl",
-    price: 30,
-    category: "pottery",
-    image: "https://via.placeholder.com/300"
+    name: "Wooden Wall Art",
+    price: 60,
+    description: "Premium wooden carved wall decor.",
+    category: "decor",
   },
   {
     id: 3,
     name: "Beaded Necklace",
-    price: 25,
+    price: 30,
+    description: "Elegant handmade jewelry piece.",
     category: "jewelry",
-    image: "https://via.placeholder.com/300"
   },
   {
     id: 4,
-    name: "Handwoven Textile",
-    price: 60,
-    category: "textiles",
-    image: "https://via.placeholder.com/300"
-  }
+    name: "Clay Pot",
+    price: 35,
+    description: "Traditional artisan clay pot.",
+    category: "pottery",
+  },
 ];
 
 export default products;
