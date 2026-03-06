@@ -20,6 +20,14 @@ const userSchema = new mongoose.Schema(
       enum: ["buyer", "vendor", "admin"],
       default: "buyer",
     },
+    storeName: {
+      type: String,
+      default: "",
+    },
+    storeDescription: {
+      type: String,
+      default: "",
+    },
   },
   { timestamps: true }
 );

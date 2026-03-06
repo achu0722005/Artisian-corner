@@ -1,12 +1,15 @@
 import React from "react";
-import { NavLink, Link } from "react-router-dom";
-import { ShoppingCart, Leaf } from "lucide-react";
+import { NavLink, Link, useNavigate } from "react-router-dom";
+import { ShoppingCart, Leaf, User, LogOut } from "lucide-react";
 import { useCart } from "../context/CartContext";
+import { useAuth } from "../context/AuthContext";
 import { useState } from "react";
 import { Gem, Home, Palette, Flower, Shirt } from "lucide-react";
 const Navbar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const { cartItems } = useCart();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
   const totalItems = cartItems.reduce((total, item) => {
     return total + item.quantity;
@@ -108,10 +111,34 @@ const Navbar = () => {
 
 </div>
       {/* RIGHT SIDE */}
-      <div className="flex items-center gap-8 text-sm font-medium text-stone-700">
-        <NavLink to="/login" className={linkStyle}>
-          Login
-        </NavLink>
+      <div className="flex items-center gap-6 text-sm font-medium text-stone-700">
+        {user ? (
+          <>
+            {user.role === "vendor" && (
+              <NavLink to="/seller/dashboard" className="hover:text-amber-700 transition">
+                Dashboard
+              </NavLink>
+            )}
+            <NavLink to="/orders" className="hover:text-amber-700 transition">
+              Orders
+            </NavLink>
+            <span className="flex items-center gap-1 text-stone-600">
+              <User size={16} />
+              {user.name}
+            </span>
+            <button
+              onClick={() => { logout(); navigate("/"); }}
+              className="flex items-center gap-1 hover:text-red-600 transition"
+            >
+              <LogOut size={16} />
+              Logout
+            </button>
+          </>
+        ) : (
+          <NavLink to="/login" className={linkStyle}>
+            Login
+          </NavLink>
+        )}
 
         <NavLink
           to="/cart"

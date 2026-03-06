@@ -58,15 +58,71 @@ export const loginUser = async (req, res) => {
     );
 
     res.json({
-  message: "Login successful",
-  token,
-  user: {
-    _id: user._id,
-    name: user.name,
-    email: user.email,
-    role: user.role
+      message: "Login successful",
+      token,
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        storeName: user.storeName,
+        storeDescription: user.storeDescription,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
-});
+};
+
+// Get current user profile
+export const getMe = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).select("-password");
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Become a seller
+export const becomeSeller = async (req, res) => {
+  try {
+    const { storeName, storeDescription } = req.body;
+
+    if (!storeName) {
+      return res.status(400).json({ message: "Store name is required" });
+    }
+
+    const user = await User.findById(req.user._id);
+
+    if (user.role === "vendor") {
+      return res.status(400).json({ message: "You are already a vendor" });
+    }
+
+    user.role = "vendor";
+    user.storeName = storeName;
+    user.storeDescription = storeDescription || "";
+    await user.save();
+
+    // Generate new token with updated role
+    const token = jwt.sign(
+      { id: user._id, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    res.json({
+      message: "You are now a vendor!",
+      token,
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        storeName: user.storeName,
+        storeDescription: user.storeDescription,
+      },
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

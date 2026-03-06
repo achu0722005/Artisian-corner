@@ -1,13 +1,22 @@
 import { useParams } from "react-router-dom";
-import products from "../data/products";
-import { useCart } from "../context/CartContext";
+import { useState, useEffect } from "react";
+import API from "../api/axios";
+import ProductCard from "../components/ProductCard";
+
 const CategoryPage = () => {
   const { categoryName } = useParams();
-  const { addToCart } = useCart(); 
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const filteredProducts = products.filter(
-    (product) => product.category === categoryName
-  );
+  useEffect(() => {
+    setLoading(true);
+    API.get(`/products?category=${categoryName}`)
+      .then((res) => setProducts(res.data))
+      .catch((err) => console.error(err))
+      .finally(() => setLoading(false));
+  }, [categoryName]);
+
+  if (loading) return <div className="p-20 text-center">Loading...</div>;
 
   return (
     <div className="p-20">
@@ -15,18 +24,15 @@ const CategoryPage = () => {
         {categoryName}
       </h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {filteredProducts.map((product) => (
-          <div key={product.id} className="bg-white p-6 rounded-xl shadow">
-            <img src={product.image} className="w-full h-48 object-cover mb-4" />
-            <h3 className="font-semibold">{product.name}</h3>
-            <p className="text-gray-600">${product.price}</p>
-            <button onClick={() => addToCart(product)} className="mt-3 bg-amber-600 text-white px-4 py-2 rounded-lg hover:bg-amber-700">
-              Add to Cart
-            </button>
-          </div>
-        ))}
-      </div>
+      {products.length === 0 ? (
+        <p className="text-gray-500">No products in this category yet.</p>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {products.map((product) => (
+            <ProductCard key={product._id} product={product} />
+          ))}
+        </div>
+      )}
     </div>
   );
 };

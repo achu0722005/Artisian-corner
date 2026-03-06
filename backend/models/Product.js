@@ -9,10 +9,27 @@ const productSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  description: String,
+  description: {
+    type: String,
+    default: "",
+  },
+  category: {
+    type: String,
+    enum: ["pottery", "decor", "jewelry", "art", "textiles", "other"],
+    default: "other",
+  },
+  image: {
+    type: String,
+    default: "",
+  },
   stock: {
     type: Number,
     default: 0,
+  },
+  vendor: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
   },
 }, { timestamps: true });
 

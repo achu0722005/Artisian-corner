@@ -1,40 +1,36 @@
 import express from "express";
-import Product from "../models/Product.js";
+import {
+  createProduct,
+  getAllProducts,
+  getProductById,
+  getVendorProducts,
+  updateProduct,
+  deleteProduct,
+} from "../controllers/productController.js";
 import authMiddleware from "../middleware/authMiddleware.js";
+import vendorMiddleware from "../middleware/vendorMiddleware.js";
+import { upload } from "../config/cloudinary.js";
 
 const router = express.Router();
 
+// Public routes
+router.get("/", getAllProducts);
 
-// 🔹 CREATE PRODUCT
-router.post("/", authMiddleware, async (req, res) => {
-  try {
-    const { name, price, description, stock } = req.body;
-
-    const product = await Product.create({
-      name,
-      price,
-      description,
-      stock,
-    });
-
-    res.status(201).json(product);
-
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+// Image upload endpoint
+router.post("/upload", authMiddleware, vendorMiddleware, upload.single("image"), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: "No image uploaded" });
   }
+  res.json({ imageUrl: req.file.path });
 });
 
+// Vendor routes (must be BEFORE /:id to avoid conflicts)
+router.get("/vendor/my-products", authMiddleware, vendorMiddleware, getVendorProducts);
+router.post("/", authMiddleware, vendorMiddleware, createProduct);
+router.put("/:id", authMiddleware, vendorMiddleware, updateProduct);
+router.delete("/:id", authMiddleware, vendorMiddleware, deleteProduct);
 
-// 🔹 GET ALL PRODUCTS
-router.get("/", async (req, res) => {
-  try {
-    const products = await Product.find();
-    res.json(products);
-
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
+// Parameterized route last
+router.get("/:id", getProductById);
 
 export default router;

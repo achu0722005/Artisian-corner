@@ -1,5 +1,4 @@
-import React from 'react'
-import Navbar from '../components/Navbar'
+import React, { useState, useEffect } from 'react'
 import hero from "../assets/hero.jpg";
 import { Link } from "react-router-dom";
 import CategoryCard from "../components/CategoryCard.jsx";
@@ -7,13 +6,19 @@ import category1 from "../assets/category1.jpg"
 import category2 from "../assets/category2.jpg"
 import category3 from "../assets/category3.jpg"
 import category4 from "../assets/category4.jpg"
-import products from "../data/products";
 import ProductCard from "../components/ProductCard";
 import { useNavigate } from "react-router-dom";
-
+import API from "../api/axios";
 
 const Home = () => {
   const navigate = useNavigate();
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    API.get("/products")
+      .then((res) => setProducts(res.data.slice(0, 6)))
+      .catch((err) => console.error(err));
+  }, []);
   const categories = [
   { title: "Pottery", image: category1 },
   { title: "Home Decor", image: category2 },
