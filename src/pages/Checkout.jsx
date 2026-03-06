@@ -7,7 +7,7 @@ import { Elements, CardElement, useStripe, useElements } from "@stripe/react-str
 import API from "../api/axios";
 
 // Replace with your Stripe publishable key
-const stripePromise = loadStripe("pk_test_placeholder");
+const stripePromise = loadStripe("pk_test_51T81fQCT7rvvP31lwS2JEiPUWtG7u7tHif8iVhch0Mi3VdzI7faqhjYpaTIVmxiyRPJIvGHgyBKeYem8fGzKvlDj00iY4ry9OV");
 
 const CheckoutForm = () => {
   const { cartItems, clearCart } = useCart();
